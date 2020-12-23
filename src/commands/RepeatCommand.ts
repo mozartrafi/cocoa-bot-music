@@ -8,7 +8,7 @@ import { createEmbed } from "../utils/createEmbed";
     aliases: ["loop", "music-repeat", "music-loop"],
     name: "repeat",
     description: "Repeat the current track or queue",
-    usage: "{prefix}repeat <all | one | disable>"
+    usage: "{prefix}repeat <all|one|disable>"
 })
 export class RepeatCommand extends BaseCommand {
     @isUserInTheVoiceChannel()
