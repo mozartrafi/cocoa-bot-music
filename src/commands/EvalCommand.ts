@@ -8,11 +8,11 @@ import { DefineCommand } from "../utils/decorators/DefineCommand";
 import { createEmbed } from "../utils/createEmbed";
 
 @DefineCommand({
-    aliases: ["ev", "js-exec", "e", "evaluate"],
+    aliases: ["mev", "music-evaluate"],
     cooldown: 0,
     description: "Only the bot owner can use this command",
-    name: "eval",
-    usage: "{prefix}eval <some js code>"
+    name: "music-eval",
+    usage: "{prefix}music-eval <some js code>"
 })
 export class EvalCommand extends BaseCommand {
     public async execute(message: IMessage, args: string[]): Promise<any> {
