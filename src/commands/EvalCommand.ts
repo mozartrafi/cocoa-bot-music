@@ -8,7 +8,7 @@ import { DefineCommand } from "../utils/decorators/DefineCommand";
 import { createEmbed } from "../utils/createEmbed";
 
 @DefineCommand({
-    aliases: ["mev", "music-evaluate"],
+    aliases: ["music-evaluate", "music-ev"],
     cooldown: 0,
     description: "Only the bot owner can use this command",
     name: "music-eval",
