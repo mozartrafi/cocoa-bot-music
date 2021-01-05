@@ -10,12 +10,6 @@ export class MessageEvent extends BaseListener {
         if (message.author.bot || message.channel.type !== "text") return message;
 
         if (message.content.toLowerCase().startsWith(this.client.config.prefix)) return this.client.commands.handle(message);
-
-        if ((await this.getUserFromMention(message.content))?.id === message.client.user?.id) {
-            return message.channel.send(
-                createEmbed("info", `👋  **|**  Hi there, my prefix is **\`${this.client.config.prefix}\`**`)
-            );
-        }
     }
 
     private getUserFromMention(mention: string): Promise<User | undefined> {
