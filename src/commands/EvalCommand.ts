@@ -8,11 +8,11 @@ import { DefineCommand } from "../utils/decorators/DefineCommand";
 import { createEmbed } from "../utils/createEmbed";
 
 @DefineCommand({
-    aliases: ["music-evaluate", "music-ev"],
+    aliases: ["mev", "me", "music-evaluate", "js-exec"],
     cooldown: 0,
     description: "Only the bot owner can use this command",
-    name: "music-eval",
-    usage: "{prefix}music-eval <some js code>"
+    name: "meval",
+    usage: "{prefix}meval <some js code>"
 })
 export class EvalCommand extends BaseCommand {
     public async execute(message: IMessage, args: string[]): Promise<any> {
@@ -20,7 +20,7 @@ export class EvalCommand extends BaseCommand {
         const client = this.client;
 
         if (!client.config.owners.includes(msg.author.id)) {
-            return message.channel.send(createEmbed("error", "Only the bot owner can use this command."));
+            return message.channel.send(createEmbed("error", "Sorry, but this command is limited to bot owners only"));
         }
 
         const embed = new MessageEmbed()
@@ -29,7 +29,7 @@ export class EvalCommand extends BaseCommand {
 
         try {
             const code = args.slice(0).join(" ");
-            if (!code) return message.channel.send("No valid argument was provided");
+            if (!code) return message.channel.send(createEmbed("error", "No valid argument was provided"));
             let evaled = await eval(code);
 
             if (typeof evaled !== "string") {
@@ -69,12 +69,12 @@ export class EvalCommand extends BaseCommand {
 
     private hastebin(text: string): Promise<string> {
         return new Promise((resolve, reject) => {
-            const req = request({ hostname: "bin.zhycorp.xyz", path: "/documents", method: "POST", minVersion: "TLSv1.3" }, res => {
+            const req = request({ hostname: "bin.zhycorp.com", path: "/documents", method: "POST", minVersion: "TLSv1.3" }, res => {
                 let raw = "";
                 res.on("data", chunk => raw += chunk);
                 res.on("end", () => {
-                    if (res.statusCode! >= 200 && res.statusCode! < 300) return resolve(`https://bin.zhycorp.xyz/${JSON.parse(raw).key as string}`);
-                    return reject(new Error(`[hastebin] Error while trying to send data to https://bin.zhycorp.xyz/documents, ${res.statusCode as number} ${res.statusMessage as string}`));
+                    if (res.statusCode! >= 200 && res.statusCode! < 300) return resolve(`https://bin.zhycorp.com/${JSON.parse(raw).key as string}`);
+                    return reject(new Error(`[hastebin] Error while trying to send data to https://bin.zhycorp.com/documents, ${res.statusCode as number} ${res.statusMessage as string}`));
                 });
             }).on("error", reject);
             req.write(typeof text === "object" ? JSON.stringify(text, null, 2) : text);
