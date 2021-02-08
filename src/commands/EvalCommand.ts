@@ -8,11 +8,11 @@ import { DefineCommand } from "../utils/decorators/DefineCommand";
 import { createEmbed } from "../utils/createEmbed";
 
 @DefineCommand({
-    aliases: ["mev", "me", "music-evaluate", "js-exec"],
+    aliases: ["music-ev", "music-e", "music-evaluate", "music-js-exec"],
     cooldown: 0,
     description: "Only the bot owner can use this command",
-    name: "meval",
-    usage: "{prefix}meval <some js code>"
+    name: "music-eval",
+    usage: "{prefix}music-eval <some js code>"
 })
 export class EvalCommand extends BaseCommand {
     public async execute(message: IMessage, args: string[]): Promise<any> {
@@ -60,8 +60,8 @@ export class EvalCommand extends BaseCommand {
     private clean(text: string): string {
         if (typeof text === "string") {
             return text
-                .replace(new RegExp(process.env.DISCORD_TOKEN!, "g"), "[REDACTED]")
-                .replace(new RegExp(process.env.YT_API_KEY!, "g"), "[REDACTED]")
+                .replace(new RegExp(process.env.SECRET_DISCORD_TOKEN!, "g"), "[REDACTED]")
+                .replace(new RegExp(process.env.SECRET_YT_API_KEY!, "g"), "[REDACTED]")
                 .replace(/`/g, `\`${String.fromCharCode(8203)}`)
                 .replace(/@/g, `@${String.fromCharCode(8203)}`);
         } return text;
