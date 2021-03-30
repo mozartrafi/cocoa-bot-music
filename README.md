@@ -11,17 +11,15 @@
 
 **Requires [Node.js](https://nodejs.org) version v14.x or above.**
 
-1. Install [Node.js](https://nodejs.org) and [Yarn (Optional)](https://yarnpkg.com)
+1. Install [Node.js](https://nodejs.org)
 2. Delete old `.env`, rename `.env.schema` to `.env` and fill out the values (example on .env.example)
 3. Install dependencies as stated [here](https://github.com/zhycorp/disc-11#Installation) before you continue surfing
-4. Run `npm run build`, or `yarn run build` if you're using Yarn package manager
+4. Run `npm run build` using Node package manager
 5. Optional thing, prune dev dependencies (this is good to save disk spaces):
-```shell script
+```sh
 $ npm prune --production
-# or with yarn
-$ yarn install --production
 ```
-6. Start it with `npm start` or `yarn start`, and you're done!
+6. Start it with `npm start`, and you're done!
 
 Notes: 
 1. You only need to configure .env file when you're using the [Docker image](https://github.com/zhycorp/disc-11#Docker)
@@ -30,18 +28,13 @@ Notes:
 ## Installation
 
 Without optional packages
-```shell script
+```sh
 $ npm install --no-optional
-# or with yarn
-$ yarn install --ignore-optional
 ```
 
 With optional packages (recommended)
-
-```shell script
+```sh
 $ npm install
-# or with yarn
-$ yarn install
 ```
 For optional packages, you need to install build tools as stated [here](https://github.com/nodejs/node-gyp#installation) and you also need to install [Git](https://git-scm.com/).
 
@@ -58,11 +51,11 @@ You can still use Glitch and keep it online in this project, no worries 😉
 3. Please specify the field with `https://github.com/zhycorp/disc-11`, then wait for a while
 4. Find the file names `.env.schema` then rename it to `.env`, let's configure that
 5. Get your bot token at [Discord developer portal](https://discord.com/developers/applications) then invite it to your server, and fill the bot prefix with anything you want
-8. To get an YouTube API v3 Key, please watch [this video](https://youtu.be/6CSeovx0nvc?t=161) carefully
+8. To get an YouTube API v3 Key, please watch [this video](https://youtu.be/K2nqthN1xKQ?t=203) carefully
 9. Specify another options on that file. If you don't know how, there's `.env.example` so you can know what it should looks like
 10. After that, go to **Tools** > **Terminal** type `refresh`
 11. Close **Terminal** tab, then open **Tools** > **Logs**, wait for a while
-13. To make it stay online, please watch [this video](https://youtu.be/6CSeovx0nvc?t=547) carefully.
+13. To make it stay online, please watch [this video](https://youtu.be/K2nqthN1xKQ?t=551) carefully.
 
 Your bot is online, and ready to use!
 If you have any questions or need support, feel free to join our [Discord server](https://zhycorp.com/discord).
@@ -74,24 +67,24 @@ Sure, we have provided them on the [Docker Hub](https://hub.docker.com/r/hazmi35
 ### Volumes
 [Docker Volumes](https://docs.docker.com/storage/volumes/) are needed to store cache and logs persistently.
 
-### Example:
-```shell
+### Example
+```sh
 $ docker run --env-file .env --volume cache:/app/cache --volume logs:/app/logs --restart unless-stopped hazmi35/jukebox
 ```
 We also provide [docker-compose.yml](docker-compose.yml) if you want to go that way.
 
 ### Compose Example
-```
+```sh
 $ docker-compose up
 ```
 
 ## Features
-- A production-ready music bot, suitable for you that don't like to hassling with the code
 - Basic Commands (Help, Ping, Invite & Eval [for advanced bot owners])
 - Basic Music Commands (Play, Skip, Stop, Pause & Resume, Now Playing, Queue, Repeat, Volume)
+- A production-ready music bot, suitable for you that don't like to hassling with the code
 - Caching (cache youtube downloads)
 - Configurable (easy to use)
 - Docker-friendly (if you're advanced user)
 - Lightweight (only around 120MB with dev dependencies pruned)
 
-Based on [discord-music-bot](https://github.com/iCrawl/discord-music-bot) and reworked from [jukebox](https://github.com/Hazmi35/jukebox)
+Based on [jukebox](https://github.com/Hazmi35/jukebox)

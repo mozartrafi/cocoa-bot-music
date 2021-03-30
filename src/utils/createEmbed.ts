@@ -4,8 +4,8 @@ import { embedColor } from "../config";
 type hexColorsType = "info" | "warn" | "error";
 const hexColors: Record<hexColorsType, string> = {
     info: embedColor,
-    warn: "#FFFF00",
-    error: "#FF0000"
+    warn: "YELLOW",
+    error: "RED"
 };
 
 export function createEmbed(type: hexColorsType, message?: string): MessageEmbed {
