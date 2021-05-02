@@ -8,12 +8,12 @@ import { DefineCommand } from "../utils/decorators/DefineCommand";
 import { createEmbed } from "../utils/createEmbed";
 
 @DefineCommand({
-    aliases: ["music-botinfo", "music-info", "music-stats"],
-    name: "music-about",
+    aliases: ["mbotinfo", "minfo", "mstats"],
+    name: "mabout",
     description: "Send the information about the bot",
-    usage: "{prefix}music-about"
+    usage: "{prefix}mabout"
 })
-export class AboutCommand extends BaseCommand {
+export class MaboutCommand extends BaseCommand {
     public async execute(message: IMessage): Promise<void> {
         const opusEncoderName = this.getOpusEncoder().name;
         message.channel.send(

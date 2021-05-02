@@ -8,12 +8,13 @@ import { DefineCommand } from "../utils/decorators/DefineCommand";
 import { isUserInTheVoiceChannel, isSameVoiceChannel, isValidVoiceChannel } from "../utils/decorators/MusicHelper";
 import { createEmbed } from "../utils/createEmbed";
 import { Video } from "../utils/YouTube/structures/Video";
+let disconnectTimer: any;
 
 @DefineCommand({
     aliases: ["p", "add", "play-music"],
     name: "play",
     description: "Play some music",
-    usage: "{prefix}play <youtube video or playlist link / youtube video name>"
+    usage: "{prefix}play <youtube video or playlist link | youtube video name>"
 })
 export class PlayCommand extends BaseCommand {
     @isUserInTheVoiceChannel()
@@ -23,7 +24,7 @@ export class PlayCommand extends BaseCommand {
         const voiceChannel = message.member!.voice.channel!;
         if (!args[0]) {
             return message.channel.send(
-                createEmbed("error", `Invalid usage, see **\`${this.client.config.prefix}help play\`** for more information`)
+                createEmbed("error", `Invalid usage, use **\`${this.client.config.prefix}help play\`** for more information`)
             );
         }
         const searchString = args.join(" ");
@@ -67,7 +68,7 @@ export class PlayCommand extends BaseCommand {
                     );
                 }
                 return message.channel.send(
-                    createEmbed("info", `✅ **|** All videos in **[${playlist.title}](${playlist.url})** playlist, has been added to the queue`)
+                    createEmbed("info", `✅ **|** All videos in **[${playlist.title}](${playlist.url})** playlist has been added to the queue`)
                         .setThumbnail(playlist.thumbnailURL)
 
                 );
@@ -108,7 +109,7 @@ export class PlayCommand extends BaseCommand {
                         response.first()?.delete({ timeout: 3000 }).catch(e => e);
                     } catch (error) {
                         msg.delete().catch(e => this.client.logger.error("PLAY_CMD_ERR:", e));
-                        return message.channel.send(createEmbed("error", "No or invalid value entered, the music selection has canceled"));
+                        return message.channel.send(createEmbed("error", "None or invalid value entered, the music selection has canceled"));
                     }
                     if (response.first()?.content === "c" || response.first()?.content === "cancel") {
                         return message.channel.send(createEmbed("warn", "The music selection has canceled"));
@@ -126,10 +127,11 @@ export class PlayCommand extends BaseCommand {
 
     private async handleVideo(video: Video, message: IMessage, voiceChannel: VoiceChannel, playlist = false): Promise<any> {
         const song: ISong = {
+            duration: this.milDuration(video.duration),
             id: video.id,
+            thumbnail: video.thumbnailURL,
             title: this.cleanTitle(video.title),
-            url: video.url,
-            thumbnail: video.thumbnailURL
+            url: video.url
         };
         if (message.guild?.queue) {
             if (!this.client.config.allowDuplicate && message.guild.queue.songs.find(s => s.id === song.id)) {
@@ -174,13 +176,20 @@ export class PlayCommand extends BaseCommand {
     private async play(guild: IGuild): Promise<any> {
         const serverQueue = guild.queue!;
         const song = serverQueue.songs.first();
+        const timeout = this.client.config.deleteQueueTimeout;
+        clearTimeout(disconnectTimer);
         if (!song) {
             if (serverQueue.lastMusicMessageID !== null) serverQueue.textChannel?.messages.fetch(serverQueue.lastMusicMessageID, false).then(m => m.delete()).catch(e => this.client.logger.error("PLAY_ERR:", e));
             if (serverQueue.lastVoiceStateUpdateMessageID !== null) serverQueue.textChannel?.messages.fetch(serverQueue.lastVoiceStateUpdateMessageID, false).then(m => m.delete()).catch(e => this.client.logger.error("PLAY_ERR:", e));
             serverQueue.textChannel?.send(
-                createEmbed("info", `⏹ **|** The music has ended, use **\`${guild.client.config.prefix}play\`** to play a music again`)
+                createEmbed("info", `⏹ **|** The music has ended, use **\`${guild.client.config.prefix}play\`** to play some music`)
             ).catch(e => this.client.logger.error("PLAY_ERR:", e));
-            serverQueue.connection?.disconnect();
+            disconnectTimer = setTimeout(() => {
+                serverQueue.connection?.disconnect();
+                serverQueue.textChannel?.send(
+                    createEmbed("info", `👋 **|** Left from the voice channel because I've been inactive for too long.`)
+                ).then(m => m.delete({ timeout: 5000 })).catch(e => e);
+            }, timeout);
             return guild.queue = null;
         }
 
@@ -230,6 +239,15 @@ export class PlayCommand extends BaseCommand {
                 this.client.logger.error("PLAY_ERR:", err);
             })
             .setVolume(serverQueue.volume / guild.client.config.maxVolume);
+    }
+
+    private milDuration(duration: any): number {
+        const days = duration.days * 86400000;
+        const hours = duration.hours * 3600000;
+        const minutes = duration.minutes * 60000;
+        const seconds = duration.seconds * 1000;
+
+        return days + hours + minutes + seconds;
     }
 
     private cleanTitle(title: string): string {

@@ -42,10 +42,10 @@ export class RepeatCommand extends BaseCommand {
                 .catch(e => this.client.logger.error("REPEAT_CMD_ERR:", e));
         } else if (Object.keys(modes).includes(mode)) {
             message.guild!.queue!.loopMode = modes[mode];
-            message.channel.send(createEmbed("info", `${modeEmoji[message.guild!.queue!.loopMode]} **|** The repeat mode has set to **\`${modeTypes[message.guild!.queue!.loopMode]}\`**`))
+            message.channel.send(createEmbed("info", `${modeEmoji[message.guild!.queue!.loopMode]} **|** The repeat mode has been set to **\`${modeTypes[message.guild!.queue!.loopMode]}\`**`))
                 .catch(e => this.client.logger.error("REPEAT_CMD_ERR:", e));
         } else {
-            message.channel.send(createEmbed("error", `Invalid usage, see **\`${this.client.config.prefix}help ${this.meta.name}\`** for more information`))
+            message.channel.send(createEmbed("error", `Invalid usage, use **\`${this.client.config.prefix}help ${this.meta.name}\`** for more information`))
                 .catch(e => this.client.logger.error("REPEAT_CMD_ERR:", e));
         }
     }

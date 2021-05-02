@@ -11,10 +11,10 @@ import { createEmbed } from "../utils/createEmbed";
     aliases: ["mev", "music-evaluate", "music-js-exec"],
     cooldown: 0,
     description: "Private command, only the bot owners can use this",
-    name: "music-eval",
-    usage: "{prefix}music-eval <some code>"
+    name: "meval",
+    usage: "{prefix}meval <some code>"
 })
-export class EvalCommand extends BaseCommand {
+export class MevalCommand extends BaseCommand {
     public async execute(message: IMessage, args: string[]): Promise<any> {
         const msg = message;
         const client = this.client;
